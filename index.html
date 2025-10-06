@@ -63,7 +63,7 @@
     object-fit: cover;
   }
 
-  /* 💡 Tambahan: Auto landscape di HP portrait */
+  /* 💡 Auto landscape di HP (portrait) */
   @media screen and (orientation: portrait) {
     #birthday-video video {
       transform: translate(-50%, -50%) rotate(90deg);
@@ -96,17 +96,19 @@
 
   <!-- Video Fullscreen -->
   <div id="birthday-video">
-    <video>
+    <video id="myVideo" controls>
       <source src="video-ulang-tahun.mp4" type="video/mp4" />
       Maaf, browser kamu tidak mendukung video.
     </video>
   </div>
 
   <script>
-    const targetDate = new Date(2025, 9, 6, 17, 32, 0); // 7 Okt 2025 jam 00:00
+    // ⏰ Ganti jam target
+    const targetDate = new Date(2025, 9, 6, 17, 32, 0); 
     const countdownEl = document.getElementById("countdown");
     const container = document.getElementById("container");
     const videoContainer = document.getElementById("birthday-video");
+    const video = document.getElementById("myVideo");
 
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -114,13 +116,15 @@
 
       if (distance <= 0) {
         clearInterval(timer);
-        // Sembunyikan konten countdown
+
+        // Sembunyikan countdown dan tampilkan video fullscreen
         container.style.display = "none";
-        // Tampilkan video fullscreen
         videoContainer.style.display = "block";
-        // Autoplay video
-        const video = videoContainer.querySelector("video");
-        video.play();
+
+        // 💡 Video tidak autoplay — user bisa tekan play sendiri
+        // atau kamu bisa uncomment baris di bawah untuk langsung play manual
+        // video.play();
+
         return;
       }
 
@@ -130,9 +134,7 @@
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       let text = '';
-      if (days > 0) {
-        text += `${days} hari `;
-      }
+      if (days > 0) text += `${days} hari `;
       text += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
       countdownEl.innerHTML = text;
@@ -140,10 +142,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
