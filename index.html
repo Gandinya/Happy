@@ -1,84 +1,144 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday Countdown 🎂</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Countdown Ulang Tahun 🎉</title>
+ <style>
+  * {
+    box-sizing: border-box;
+  }
 
-  <style>
-    body {
-      background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
-      overflow: hidden;
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #121212;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #container {
+    text-align: center;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+
+  #countdown {
+    font-size: 3em;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  #poem {
+    font-size: 1.2em;
+    margin-top: 30px;
+    line-height: 1.6;
+    padding: 0 20px;
+    white-space: pre-line;
+  }
+
+  #birthday-video {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    z-index: 9999;
+  }
+
+  #birthday-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* 💡 Auto landscape di HP (portrait) */
+  @media screen and (orientation: portrait) {
+    #birthday-video video {
+      transform: translate(-50%, -50%) rotate(90deg);
+      transform-origin: center center;
+      width: 100vh;
+      height: 100vw;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      object-fit: cover;
     }
-    .title {
-      font-family: 'Great Vibes', cursive;
-      font-size: 2.5rem;
-      background: linear-gradient(90deg, #ff9a9e, #fad0c4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: glow 3s infinite alternate;
-    }
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #ffb6c1; }
-      to { text-shadow: 0 0 25px #ff9a9e; }
-    }
-    .fade-in {
-      animation: fadeIn 1.5s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+  }
+</style>
+
 </head>
-<body class="flex flex-col items-center justify-center h-screen text-center px-4">
-
-  <h1 class="title mb-4 fade-in">Countdown ke Ulang Tahun 🎉</h1>
-
-  <div id="countdown" class="text-5xl font-semibold mb-8 text-pink-300 fade-in"></div>
-
-  <div class="text-lg leading-relaxed fade-in">
-    <p class="mb-2 text-gray-300">Di hari istimewa ini,</p>
-    <p class="mb-2 text-pink-200">Izinkan aku mengucap dengan penuh rasa,</p>
-    <p class="mb-2 text-gray-300">Selamat ulang tahun, 💕</p>
-    <p class="mb-2 text-gray-400 italic">May every second bring you happiness,</p>
-    <p class="mb-2 text-gray-400 italic">And every breath you take be a blessing.</p>
-    <p class="mt-4 text-pink-400 font-semibold">I love you, always and forever. 💗</p>
+<body>
+  <!-- Countdown Container -->
+  <div id="container">
+    <h1>Countdown ke Ulang Tahun 🎉</h1>
+    <div id="countdown">00:00:00</div>
+    <div id="poem">
+      Di hari istimewa ini,<br />
+      Izinkan aku mengucap dengan penuh rasa,<br />
+      Selamat ulang tahun,<br />
+      May every second bring you happiness,<br />
+      And every breath you take be a blessing.<br />
+      I love you, always and forever. 💖
+    </div>
   </div>
 
-  <audio id="bgm" src="your-song.mp3" autoplay loop muted playsinline></audio>
+  <!-- Video Fullscreen -->
+  <div id="birthday-video">
+    <video id="myVideo" controls>
+      <source src="video-ulang-tahun.mp4" type="video/mp4" />
+      Maaf, browser kamu tidak mendukung video.
+    </video>
+  </div>
 
   <script>
-    // Countdown
-    const countdownEl = document.getElementById('countdown');
-    const targetDate = new Date("2025-07-03T00:00:00").getTime();
+    // ⏰ Ganti jam target
+    const targetDate = new Date(2025, 9, 6, 17, 32, 0); 
+    const countdownEl = document.getElementById("countdown");
+    const container = document.getElementById("container");
+    const videoContainer = document.getElementById("birthday-video");
+    const video = document.getElementById("myVideo");
 
-    const updateCountdown = () => {
+    const timer = setInterval(() => {
       const now = new Date().getTime();
-      const distance = targetDate - now;
+      const distance = targetDate.getTime() - now;
+
+      if (distance <= 0) {
+        clearInterval(timer);
+
+        // Sembunyikan countdown dan tampilkan video fullscreen
+        container.style.display = "none";
+        videoContainer.style.display = "block";
+
+        // 💡 Video tidak autoplay — user bisa tekan play sendiri
+        // atau kamu bisa uncomment baris di bawah untuk langsung play manual
+        // video.play();
+
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      countdownEl.innerHTML = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+      let text = '';
+      if (days > 0) text += `${days} hari `;
+      text += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-      if (distance < 0) {
-        countdownEl.innerHTML = "🎂 Selamat Ulang Tahun! 🎂";
-      }
-    };
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-
-    // Auto unmute audio (setelah interaksi)
-    document.body.addEventListener('click', () => {
-      const bgm = document.getElementById('bgm');
-      bgm.muted = false;
-      bgm.play();
-    });
+      countdownEl.innerHTML = text;
+    }, 1000);
   </script>
 </body>
 </html>
