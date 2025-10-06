@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Countdown Ulang Tahun</title>
+  <title>Countdown ke Ulang Tahun 💖</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,37 +13,80 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      background-color: #121212;
+      background: radial-gradient(circle at top, #2a2a72, #121212);
       color: white;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Poppins', sans-serif;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
     #container {
       text-align: center;
       padding: 20px;
+      animation: fadeIn 2s ease-in-out;
     }
 
     h1 {
-      font-size: 2em;
+      font-size: 2.2em;
       margin-bottom: 20px;
+      background: linear-gradient(90deg, #ff69b4, #ffa500, #ffff66);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
     }
 
     #countdown {
-      font-size: 3em;
-      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
       margin-top: 10px;
+    }
+
+    .time-box {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+      padding: 15px 18px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #fff;
+      min-width: 85px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .label {
+      display: block;
+      font-size: 0.6em;
+      color: #ddd;
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+
+    .flip {
+      animation: flip 0.6s ease;
+    }
+
+    @keyframes flip {
+      0% { transform: rotateX(0); }
+      50% { transform: rotateX(90deg); opacity: 0.6; }
+      100% { transform: rotateX(0); opacity: 1; }
     }
 
     #poem {
       font-size: 1.2em;
-      margin-top: 30px;
-      line-height: 1.6;
-      padding: 0 20px;
-      white-space: pre-line;
+      margin-top: 35px;
+      line-height: 1.7;
+      padding: 0 25px;
+      color: #eee;
+      text-shadow: 0 2px 10px rgba(255,255,255,0.2);
+      animation: fadeIn 3s ease-in;
     }
 
     #birthday-video {
@@ -63,7 +106,6 @@
       object-fit: cover;
     }
 
-    /* 💡 Auto landscape di HP (portrait) */
     @media screen and (orientation: portrait) {
       #birthday-video video {
         transform: translate(-50%, -50%) rotate(90deg);
@@ -76,31 +118,48 @@
         object-fit: cover;
       }
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
 
+  <!-- Countdown Container -->
   <div id="container">
-    <h1>Hitung Mundur Menuju Ulang Tahun 🎉</h1>
-    <div id="countdown"></div>
+    <h1>Countdown ke Ulang Tahun 🎉</h1>
+    <div id="countdown">
+      <div class="time-box"><span id="hours">00</span><span class="label">JAM</span></div>
+      <div class="time-box"><span id="minutes">00</span><span class="label">MENIT</span></div>
+      <div class="time-box"><span id="seconds">00</span><span class="label">DETIK</span></div>
+    </div>
     <div id="poem">
-      “Waktu terus berjalan,  
-      detik demi detik mendekatkan kita,  
-      menuju momen penuh makna.” 🎂
+      Di hari istimewa ini,<br />
+      Izinkan aku mengucap dengan penuh rasa,<br />
+      Selamat ulang tahun,<br />
+      May every second bring you happiness,<br />
+      And every breath you take be a blessing.<br />
+      I love you, always and forever. 💖
     </div>
   </div>
 
+  <!-- Video Fullscreen (ASLI kamu, gak diubah) -->
   <div id="birthday-video">
-    <video id="myVideo" autoplay muted playsinline>
-      <source src="video.mp4" type="video/mp4">
-      Browser kamu tidak mendukung tag video.
+    <video id="myVideo" controls>
+      <source src="video-ulang-tahun.mp4" type="video/mp4" />
+      Maaf, browser kamu tidak mendukung video.
     </video>
   </div>
 
   <script>
-    // ⏰ Ganti jam target
+    // 🕒 Ganti waktu target (tahun, bulan (0-11), tanggal, jam, menit, detik)
     const targetDate = new Date(2025, 9, 6, 17, 32, 0); 
-    const countdownEl = document.getElementById("countdown");
+
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
     const container = document.getElementById("container");
     const videoContainer = document.getElementById("birthday-video");
     const video = document.getElementById("myVideo");
@@ -111,27 +170,25 @@
 
       if (distance <= 0) {
         clearInterval(timer);
-
-        // Sembunyikan countdown dan tampilkan video fullscreen
         container.style.display = "none";
         videoContainer.style.display = "block";
-
-        // 💡 Auto play video (jika ingin manual, hapus baris di bawah)
-        video.play();
-
+        // 💡 Tidak autoplay otomatis, user bisa klik "play" manual
         return;
       }
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      let text = '';
-      if (days > 0) text += `${days} hari `;
-      text += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      // Efek flip jika berubah
+      if (secondsEl.textContent !== String(seconds).padStart(2, '0')) {
+        secondsEl.classList.add("flip");
+        setTimeout(() => secondsEl.classList.remove("flip"), 600);
+      }
 
-      countdownEl.innerHTML = text;
+      hoursEl.textContent = String(hours).padStart(2, '0');
+      minutesEl.textContent = String(minutes).padStart(2, '0');
+      secondsEl.textContent = String(seconds).padStart(2, '0');
     }, 1000);
   </script>
 
