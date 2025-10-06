@@ -96,7 +96,7 @@
 
   <!-- Video Fullscreen -->
   <div id="birthday-video">
-    <video autoplay playsinline>
+    <video id="myVideo" autoplay muted playsinline>
       <source src="video-ulang-tahun.mp4" type="video/mp4" />
       Maaf, browser kamu tidak mendukung video.
     </video>
@@ -137,9 +137,18 @@
 
       countdownEl.innerHTML = text;
     }, 1000);
+
+    const video = document.getElementById("myVideo");
+  video.play().then(() => {
+    // Aktifkan suara setelah video berhasil jalan
+    video.muted = false;
+  }).catch(err => {
+    console.log("Autoplay dengan suara diblokir:", err);
+  });
   </script>
 </body>
 </html>
+
 
 
 
