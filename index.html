@@ -12,9 +12,15 @@
       padding: 50px;
     }
 
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
     #countdown {
       font-size: 48px;
       margin-top: 20px;
+      font-weight: bold;
     }
 
     #birthday-video {
@@ -28,11 +34,16 @@
       border: 4px solid #fff;
       border-radius: 10px;
     }
+
+    h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
   <h1>Countdown ke Ulang Tahun 🎉</h1>
-  <div id="countdown"></div>
+  <div id="countdown">00:00:00</div>
 
   <div id="birthday-video">
     <h2>Selamat Ulang Tahun! 🎂</h2>
@@ -43,17 +54,29 @@
   </div>
 
   <script>
-    function getNextMidnight() {
+    // Fungsi untuk mendapatkan target tanggal 7 jam 00:00
+    function getTargetDate() {
       const now = new Date();
-      const midnight = new Date();
-      midnight.setHours(24, 0, 0, 0); // jam 00:00 berikutnya
-      return midnight;
+      const target = new Date();
+
+      // Set ke tanggal 7 bulan ini jam 00:00:00
+      target.setDate(7);
+      target.setHours(0, 0, 0, 0);
+
+      // Jika sekarang sudah lewat tanggal 7, ambil bulan depan
+      if (now > target) {
+        target.setMonth(target.getMonth() + 1);
+        target.setDate(7);
+        target.setHours(0, 0, 0, 0);
+      }
+
+      return target;
     }
 
     const countdownEl = document.getElementById("countdown");
     const videoContainer = document.getElementById("birthday-video");
 
-    const targetTime = getNextMidnight();
+    const targetTime = getTargetDate().getTime();
 
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -66,13 +89,18 @@
         return;
       }
 
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      countdownEl.innerHTML = `${hours.toString().padStart(2, '0')}:${minutes
-        .toString()
-        .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      let countdownText = '';
+      if (days > 0) {
+        countdownText += `${days} hari `;
+      }
+      countdownText += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+      countdownEl.innerHTML = countdownText;
     }, 1000);
   </script>
 </body>
