@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Countdown Ulang Tahun 🎉</title>
- <style>
+<style>
   * {
     box-sizing: border-box;
   }
@@ -32,10 +26,46 @@
     margin-bottom: 20px;
   }
 
+  /* 🎯 Ubah gaya time jadi flip elegan */
   #countdown {
-    font-size: 3em;
-    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    font-family: 'Courier New', monospace;
     margin-top: 10px;
+  }
+
+  .time-box {
+    background: #1e1e1e;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #fff;
+    min-width: 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .label {
+    display: block;
+    font-size: 0.5em;
+    color: #ccc;
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+
+  /* Efek flip sederhana */
+  .flip {
+    animation: flip 0.6s ease;
+  }
+
+  @keyframes flip {
+    0% { transform: rotateX(0); }
+    50% { transform: rotateX(90deg); opacity: 0.7; }
+    100% { transform: rotateX(0); opacity: 1; }
   }
 
   #poem {
@@ -77,68 +107,3 @@
     }
   }
 </style>
-
-</head>
-<body>
-  <!-- Countdown Container -->
-  <div id="container">
-    <h1>Countdown ke Ulang Tahun 🎉</h1>
-    <div id="countdown">00:00:00</div>
-    <div id="poem">
-      Di hari istimewa ini,<br />
-      Izinkan aku mengucap dengan penuh rasa,<br />
-      Selamat ulang tahun,<br />
-      May every second bring you happiness,<br />
-      And every breath you take be a blessing.<br />
-      I love you, always and forever. 💖
-    </div>
-  </div>
-
-  <!-- Video Fullscreen -->
-  <div id="birthday-video">
-    <video id="myVideo" controls>
-      <source src="video-ulang-tahun.mp4" type="video/mp4" />
-      Maaf, browser kamu tidak mendukung video.
-    </video>
-  </div>
-
-  <script>
-    // ⏰ Ganti jam target
-    const targetDate = new Date(2025, 9, 6, 17, 32, 0); 
-    const countdownEl = document.getElementById("countdown");
-    const container = document.getElementById("container");
-    const videoContainer = document.getElementById("birthday-video");
-    const video = document.getElementById("myVideo");
-
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate.getTime() - now;
-
-      if (distance <= 0) {
-        clearInterval(timer);
-
-        // Sembunyikan countdown dan tampilkan video fullscreen
-        container.style.display = "none";
-        videoContainer.style.display = "block";
-
-        // 💡 Video tidak autoplay — user bisa tekan play sendiri
-        // atau kamu bisa uncomment baris di bawah untuk langsung play manual
-        // video.play();
-
-        return;
-      }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      let text = '';
-      if (days > 0) text += `${days} hari `;
-      text += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-      countdownEl.innerHTML = text;
-    }, 1000);
-  </script>
-</body>
-</html>
