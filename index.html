@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Ulang Tahun!</title>
+  <title>Countdown Ulang Tahun 🎉</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -54,33 +54,16 @@
   </div>
 
   <script>
-    // Fungsi untuk mendapatkan target tanggal 7 jam 00:00
-    function getTargetDate() {
-      const now = new Date();
-      const target = new Date();
-
-      // Set ke tanggal 7 bulan ini jam 00:00:00
-      target.setDate(7);
-      target.setHours(0, 0, 0, 0);
-
-      // Jika sekarang sudah lewat tanggal 7, ambil bulan depan
-      if (now > target) {
-        target.setMonth(target.getMonth() + 1);
-        target.setDate(7);
-        target.setHours(0, 0, 0, 0);
-      }
-
-      return target;
-    }
+    // 💡 ATUR TANGGAL DAN JAM TARGET DI SINI
+    // Format: new Date(Tahun, Bulan(0-11), Tanggal, Jam, Menit, Detik)
+    const targetDate = new Date(2025, 9, 7, 0, 0, 0); // 7 Oktober 2025 jam 00:00
 
     const countdownEl = document.getElementById("countdown");
     const videoContainer = document.getElementById("birthday-video");
 
-    const targetTime = getTargetDate().getTime();
-
     const timer = setInterval(() => {
       const now = new Date().getTime();
-      const distance = targetTime - now;
+      const distance = targetDate.getTime() - now;
 
       if (distance <= 0) {
         clearInterval(timer);
@@ -94,13 +77,13 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      let countdownText = '';
+      let text = '';
       if (days > 0) {
-        countdownText += `${days} hari `;
+        text += `${days} hari `;
       }
-      countdownText += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      text += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-      countdownEl.innerHTML = countdownText;
+      countdownEl.innerHTML = text;
     }, 1000);
   </script>
 </body>
