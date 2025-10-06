@@ -96,7 +96,7 @@
 
   <!-- Video Fullscreen -->
   <div id="birthday-video">
-    <video id="myVideo" autoplay muted playsinline>
+    <video id="vid" autoplay muted playsinline>
       <source src="video-ulang-tahun.mp4" type="video/mp4" />
       Maaf, browser kamu tidak mendukung video.
     </video>
@@ -138,16 +138,24 @@
       countdownEl.innerHTML = text;
     }, 1000);
 
-    const video = document.getElementById("myVideo");
-video.play().then(() => {
+    const vid = document.getElementById("vid");
+
+// coba mulai dan hidupkan suara setelah video mulai
+vid.play().then(() => {
   setTimeout(() => {
-    video.muted = false; // hidupkan suara sedikit setelah play
-    video.volume = 1.0;
+    vid.muted = false;
+    vid.volume = 1.0;
   }, 500);
 }).catch(err => console.log("Autoplay diblokir:", err));
+
+// jika browser stop sendiri, paksa play lagi
+vid.addEventListener('pause', () => {
+  if (!vid.ended) vid.play();
+});
   </script>
 </body>
 </html>
+
 
 
 
