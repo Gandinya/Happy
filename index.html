@@ -1,197 +1,147 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SI BAWEL ULTAH 💖</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maafin Aku Ya?</title>
+    <style>
+        /* Gaya dasar untuk mempercantik halaman */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffccd5; /* Warna pink pastel */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Biar ngga ada scroll saat tombol loncat */
+        }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: radial-gradient(circle at top, #2a2a72, #121212);
-      color: white;
-      font-family: 'Poppins', sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
+        #main-container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
 
-    #container {
-      text-align: center;
-      padding: 20px;
-      animation: fadeIn 2s ease-in-out;
-    }
+        h1 {
+            color: #ff4d6d;
+            margin-bottom: 30px;
+        }
 
-    h1 {
-      font-size: 2.2em;
-      margin-bottom: 20px;
-      background: linear-gradient(90deg, #ff69b4, #ffa500, #ffff66);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 1px;
-    }
+        /* Gaya untuk tombol */
+        .btn {
+            font-size: 18px;
+            padding: 12px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.1s;
+        }
 
-    #countdown {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 10px;
-    }
+        #btn-yes {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
 
-    .time-box {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(8px);
-      padding: 15px 18px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      font-size: 2.5em;
-      font-weight: bold;
-      color: #fff;
-      min-width: 85px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
+        #btn-yes:hover {
+            background-color: #c9184a;
+        }
 
-    .label {
-      display: block;
-      font-size: 0.6em;
-      color: #ddd;
-      margin-top: 8px;
-      letter-spacing: 1px;
-    }
+        #btn-no {
+            background-color: #8d99ae;
+            color: white;
+            box-shadow: 0 5px 15px rgba(141, 153, 174, 0.4);
+            position: relative; /* Akan diubah ke absolute oleh JS nanti */
+        }
 
-    .flip {
-      animation: flip 0.6s ease;
-    }
+        /* Halaman hasil setelah dimaafin */
+        #result-container {
+            display: none;
+            text-align: center;
+        }
 
-    @keyframes flip {
-      0% { transform: rotateX(0); }
-      50% { transform: rotateX(90deg); opacity: 0.6; }
-      100% { transform: rotateX(0); opacity: 1; }
-    }
+        #result-container h1 {
+            font-size: 3em;
+            color: #c9184a;
+        }
 
-    #poem {
-      font-size: 1.2em;
-      margin-top: 35px;
-      line-height: 1.7;
-      padding: 0 25px;
-      color: #eee;
-      text-shadow: 0 2px 10px rgba(255,255,255,0.2);
-      animation: fadeIn 3s ease-in;
-    }
+        /* Animasi Slide dari bawah ke atas */
+        .slide-up {
+            animation: slideUpAnim 0.8s ease-out forwards;
+        }
 
-    #birthday-video {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: black;
-      z-index: 9999;
-    }
-
-    #birthday-video video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    @media screen and (orientation: portrait) {
-      #birthday-video video {
-        transform: translate(-50%, -50%) rotate(90deg);
-        transform-origin: center center;
-        width: 100vh;
-        height: 100vw;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        object-fit: cover;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+        @keyframes slideUpAnim {
+            0% {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Countdown Container -->
-  <div id="container">
-    <h1>Countdown ke Ulang Tahun 🎉</h1>
-    <div id="countdown">
-      <div class="time-box"><span id="hours">00</span><span class="label">JAM</span></div>
-      <div class="time-box"><span id="minutes">00</span><span class="label">MENIT</span></div>
-      <div class="time-box"><span id="seconds">00</span><span class="label">DETIK</span></div>
+    <!-- Kontainer Pertanyaan -->
+    <div id="main-container">
+        <h1>Maafin aku ya delaaaaaaaa jangan marahh? 🥺</h1>
+        <div id="button-group">
+            <button class="btn" id="btn-yes">Dimaafin</button>
+            <button class="btn" id="btn-no">Engga</button>
+        </div>
     </div>
-    <div id="poem">
-      Di hari istimewa ini,<br />
-      Izinkan aku mengucap dengan penuh rasa,<br />
-      Selamat ulang tahun,<br />
-      May every second bring you happiness,<br />
-      And every breath you take be a blessing.<br />
-      I love you, always and forever. 💖
+
+    <!-- Kontainer Hasil (Disembunyikan di awal) -->
+    <div id="result-container">
+        <h1 class="slide-up">Makasih yaa sayang ❤️🥰</h1>
     </div>
-  </div>
 
-  <!-- Video Fullscreen (ASLI kamu, gak diubah) -->
-  <div id="birthday-video">
-    <video id="myVideo" controls>
-      <source src="video-ulang-tahun.mp4" type="video/mp4" />
-      Maaf, browser kamu tidak mendukung video.
-    </video>
-  </div>
+    <script>
+        const btnNo = document.getElementById('btn-no');
+        const btnYes = document.getElementById('btn-yes');
+        const mainContainer = document.getElementById('main-container');
+        const resultContainer = document.getElementById('result-container');
 
-  <script>
-    // 🕒 Ganti waktu target (tahun, bulan (0-11), tanggal, jam, menit, detik)
-    const targetDate = new Date(2025, 9, 7, 0, 0, 0); 
+        // Fungsi biar tombol 'Engga' loncat-loncat
+        function kabur() {
+            // Ubah posisi jadi absolute agar bisa pindah bebas di layar
+            btnNo.style.position = 'absolute';
+            
+            // Hitung ukuran layar dikurangi ukuran tombol biar gak keluar layar
+            const maxX = window.innerWidth - btnNo.offsetWidth - 20;
+            const maxY = window.innerHeight - btnNo.offsetHeight - 20;
 
-    const hoursEl = document.getElementById("hours");
-    const minutesEl = document.getElementById("minutes");
-    const secondsEl = document.getElementById("seconds");
-    const container = document.getElementById("container");
-    const videoContainer = document.getElementById("birthday-video");
-    const video = document.getElementById("myVideo");
+            // Generate posisi acak
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
 
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate.getTime() - now;
+            // Terapkan posisi baru
+            btnNo.style.left = randomX + 'px';
+            btnNo.style.top = randomY + 'px';
+        }
 
-      if (distance <= 0) {
-        clearInterval(timer);
-        container.style.display = "none";
-        videoContainer.style.display = "block";
-        // 💡 Tidak autoplay otomatis, user bisa klik "play" manual
-        return;
-      }
+        // Bikin tombolnya loncat pas disorot mouse (di HP juga berlaku kalo pas mau di-tap)
+        btnNo.addEventListener('mouseover', kabur);
+        btnNo.addEventListener('click', kabur);
+        btnNo.addEventListener('touchstart', kabur); // Khusus layar sentuh / HP
 
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      // Efek flip jika berubah
-      if (secondsEl.textContent !== String(seconds).padStart(2, '0')) {
-        secondsEl.classList.add("flip");
-        setTimeout(() => secondsEl.classList.remove("flip"), 600);
-      }
-
-      hoursEl.textContent = String(hours).padStart(2, '0');
-      minutesEl.textContent = String(minutes).padStart(2, '0');
-      secondsEl.textContent = String(seconds).padStart(2, '0');
-    }, 1000);
-  </script>
+        // Aksi kalau tombol 'Dimaafin' dipencet
+        btnYes.addEventListener('click', function() {
+            // Sembunyikan pertanyaan
+            mainContainer.style.display = 'none';
+            // Tampilkan hasil dengan animasi slide
+            resultContainer.style.display = 'block';
+        });
+    </script>
 
 </body>
 </html>
-
